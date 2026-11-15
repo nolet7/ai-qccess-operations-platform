@@ -55,3 +55,15 @@ def test_invalid_permission(lab):
     client,auth=lab
     employee=auth("employee","tenant-a",["access:request"])
     assert client.post("/v1/access-requests",headers=employee,json={"resource":"finance-reports","permission":"owner","justification":"I need access to reports"}).status_code==422
+
+def test_ai_advisory_is_read_only_and_tenant_scoped(lab,monkeypatch):
+    from app import ai
+    monkeypatch.setattr(ai,"summarize_access",lambda resource,permission:"Require independent approval")
+    client,auth=lab
+    maker=auth("employee","tenant-a",["access:request","access:analyze"])
+    other=auth("outsider","tenant-b",["access:analyze"])
+    req=client.post("/v1/access-requests",headers=maker,json={"resource":"finance-reports","permission":"viewer","justification":"Monthly reporting access"})
+    rid=req.json()["id"]
+    found=client.get(f"/v1/access-requests/{rid}/ai-advisory",headers=maker)
+    assert found.status_code==200 and found.json()["automated_decision"] is False
+    assert client.get(f"/v1/access-requests/{rid}/ai-advisory",headers=other).status_code==404
