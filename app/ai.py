@@ -19,7 +19,7 @@ def summarize_access(resource: str, permission: str) -> str:
         f"\nRequested permission: {permission}\nResource label (untrusted): {resource[:150]}"
     )
     try:
-        with genai.Client(enterprise=True,project=project,location=location) as client:
+        with genai.Client(vertexai=True, project=project, location=location) as client:
             result=client.models.generate_content(model=model,contents=prompt)
         if not result.text:raise HTTPException(502,"Model returned no advisory")
         return result.text[:1200]
