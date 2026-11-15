@@ -2,7 +2,7 @@ locals {
   name = "access-${var.environment}"
 }
 resource "google_project_service" "apis" {
-  for_each = toset(["run.googleapis.com","sqladmin.googleapis.com","secretmanager.googleapis.com","artifactregistry.googleapis.com","iam.googleapis.com"])
+  for_each = toset(["run.googleapis.com","sqladmin.googleapis.com","secretmanager.googleapis.com","artifactregistry.googleapis.com","iam.googleapis.com","aiplatform.googleapis.com"])
   project  = var.project_id
   service  = each.key
   disable_on_destroy = false
@@ -100,6 +100,18 @@ resource "google_cloud_run_v2_service" "api" {
         }
       }
       env {
+        name  = "GOOGLE_CLOUD_PROJECT"
+        value = var.project_id
+      }
+      env {
+        name  = "GOOGLE_CLOUD_LOCATION"
+        value = var.region
+      }
+      env {
+        name  = "GOOGLE_GENAI_MODEL"
+        value = var.genai_model
+      }
+      env {
         name = "OIDC_ISSUER"
         value = var.oidc_issuer
       }
@@ -114,6 +126,11 @@ resource "google_cloud_run_v2_service" "api" {
     }
   }
   depends_on = [google_project_service.apis,google_project_iam_member.sql_client,google_secret_manager_secret_iam_member.runtime]
+}
+resource "google_project_iam_member" "vertex_user" {
+  project = var.project_id
+  role    = "roles/aiplatform.user"
+  member  = "serviceAccount:${google_service_account.runtime.email}"
 }
 # Intentionally no allUsers invoker IAM binding; grant to known trusted principals only.
 output "service_uri" {
