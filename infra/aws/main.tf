@@ -211,6 +211,8 @@ resource "aws_ecs_task_definition" "app" {
     portMappings = [{containerPort=8080,protocol="tcp"}],
     secrets = [{name="DATABASE_URL",valueFrom=aws_secretsmanager_secret.db_url.arn}],
     environment = [
+      {name="LSK_BEDROCK_MODEL_ID",value=var.bedrock_model_id},
+      {name="AWS_REGION",value=var.region},
       {name="OIDC_ISSUER",value=var.oidc_issuer},
       {name="OIDC_AUDIENCE",value=var.oidc_audience},
       {name="OIDC_JWKS_URL",value=var.oidc_jwks_url},
