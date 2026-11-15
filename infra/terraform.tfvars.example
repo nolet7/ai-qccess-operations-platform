@@ -6,3 +6,4 @@ oidc_issuer = "https://YOUR_IDENTITY_PROVIDER/"
 oidc_audience = "platform-api"
 oidc_jwks_url = "https://YOUR_IDENTITY_PROVIDER/.well-known/jwks.json"
 # Set TF_VAR_db_password from a secure source.
+genai_model = "YOUR_APPROVED_GEMINI_MODEL_ID"
