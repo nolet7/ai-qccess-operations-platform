@@ -124,3 +124,12 @@ def approve(request_id:str,p:Principal=Depends(require("access:approve")),db:Ses
 def audit(p:Principal=Depends(require("access:audit")),db:Session=Depends(get_db)):
     return [{"actor":x.actor,"action":x.action,"subject":x.subject}
             for x in db.scalars(select(AuditEvent).where(AuditEvent.tenant_id==p.tenant))]
+
+@app.get("/v1/access-requests/{request_id}/ai-advisory")
+def advisory(request_id: str,p:Principal=Depends(require("access:analyze")),db:Session=Depends(get_db)):
+    request=db.scalar(select(AccessRequest).where(AccessRequest.id==request_id,AccessRequest.tenant_id==p.tenant))
+    if request is None:
+        raise HTTPException(404,"Request not found")
+    from app.ai import summarize_access
+    note=summarize_access(request.resource,request.permission)
+    return {"request_id":request.id,"advisory":note,"automated_decision":False}
