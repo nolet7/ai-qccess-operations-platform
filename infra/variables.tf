@@ -35,3 +35,22 @@ variable "genai_model" {
   type = string
   description = "Vertex AI model ID selected for this project"
 }
+
+variable "tenant_region_policy" {
+  type        = map(list(string))
+  description = "Signed JWT tenant_id -> allowed deployment regions. Empty map denies all tenants."
+  default     = {}
+}
+variable "db_tier" {
+  type        = string
+  description = "Cloud SQL machine tier. Use a supported HA tier in production, not db-f1-micro."
+  default     = "db-f1-micro"
+}
+variable "db_availability_type" {
+  type        = string
+  default     = "ZONAL"
+  validation {
+    condition     = contains(["ZONAL", "REGIONAL"], var.db_availability_type)
+    error_message = "Database availability type must be ZONAL or REGIONAL."
+  }
+}
