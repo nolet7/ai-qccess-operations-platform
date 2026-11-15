@@ -1,6 +1,6 @@
-# Access Operations & Approvals API
+# LSK AI Access Operations Platform
 
-Independent portfolio lab: fictional ASR-inspired IAM. Not evidence of an actual employer deployment.
+Independent portfolio lab: fictional LSK IAM. Not evidence of an actual employer deployment.
 
 GCP target: FastAPI, PostgreSQL, Cloud Run, Cloud SQL, Secret Manager, Artifact Registry, Terraform, GitHub Actions WIF.
 
@@ -115,3 +115,7 @@ It returns `{"id":"...","status":"approved","provisioned":false}`. The reviewer 
 - **Not implemented:** identity provider group grants, IAM provisioning or revocation, periodic access recertification, approval expiry, full request lifecycle, or AI autonomous remediation. This approval changes only **local database state**.
 - The model returns **untrusted explanatory text**, not a policy decision. It does not execute tools or issue permissions.
 
+
+## Brixton JD alignment
+
+See [capability review and acceptance criteria](docs/JD_ALIGNMENT.md). LSK is a fictional portfolio company; employer deployments are not represented.
