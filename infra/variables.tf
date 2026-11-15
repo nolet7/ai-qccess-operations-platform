@@ -30,3 +30,8 @@ variable "deletion_protection" {
   type    = bool
   default = true
 }
+
+variable "genai_model" {
+  type = string
+  description = "Vertex AI model ID selected for this project"
+}
