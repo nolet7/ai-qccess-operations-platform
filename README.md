@@ -119,3 +119,8 @@ It returns `{"id":"...","status":"approved","provisioned":false}`. The reviewer 
 ## Brixton JD alignment
 
 See [capability review and acceptance criteria](docs/JD_ALIGNMENT.md). LSK is a fictional portfolio company; employer deployments are not represented.
+
+
+## Multinational deployment safeguards
+
+The LSK reference deployment supports an explicit region/tenant authorization gate and configurable Cloud SQL HA sizing. Read the [multinational operating standard](docs/MULTINATIONAL_DEPLOYMENT.md) before creating regional stacks. No automatic cross-region replication or failover is configured; regional legal approval, private connectivity and operational testing remain mandatory.
