@@ -54,3 +54,18 @@ variable "db_availability_type" {
     error_message = "Database availability type must be ZONAL or REGIONAL."
   }
 }
+
+variable "enable_private_sql" {
+  description = "Use a private Cloud SQL address, Direct VPC egress and Private Service Access. Enable for enterprise regional deployments."
+  type        = bool
+  default     = false
+}
+variable "private_subnet_cidr" {
+  description = "Dedicated, non-overlapping /26-or-larger CIDR for Cloud Run Direct VPC egress."
+  type        = string
+  default     = "10.90.0.0/24"
+  validation {
+    condition     = can(cidrhost(var.private_subnet_cidr, 2))
+    error_message = "private_subnet_cidr must be a valid CIDR."
+  }
+}
